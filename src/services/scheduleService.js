@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const rootURL = 'http://52.187.29.173:3002/api/secret/schedule';
+const rootURL = 'http://mango-tree.xyz:3002/api/secret/schedule';
 axios.defaults.headers['Content-Type'] = "application/json"
 
 export function createSchedule(scheduleData) {

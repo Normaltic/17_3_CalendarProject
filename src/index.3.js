@@ -1,8 +1,7 @@
 //modules
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import { Router, Route, browserHistory, IndexRoute } from 'react-router';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import ReduxThunk from 'redux-thunk';
@@ -25,14 +24,14 @@ const rootElement = document.getElementById('root');
 ReactDOM.render(
     
     <Provider store={store}>
-        <Router>
-            <div>
-                <App>
-                    <Route path="/" component={CalendarContainer} />
-                </App>
-                <Route path="/auth" component={Auth} />
-                <Route path="/signup" component={SignUp} />
-            </div>
+        <Router history={browserHistory}>
+            <Route path="/" component={App}>
+                <IndexRoute component={CalendarContainer} />
+            </Route>
+            <Route path="auth" component={Auth} >
+                <IndexRoute component={SignIn} />
+                <Route path="signup" component={SignUp} />
+            </Route>
         </Router>
     </Provider>
     

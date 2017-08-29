@@ -1,5 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
+import Signin from './SignIn';
+import Signup from './SignUp';
 
 import './Auth.css';
 
@@ -24,7 +27,8 @@ class Auth extends React.Component {
         return (
 
             <div className="row Background grey lighten-3" id="AuthParent">
-                {this.props.children}
+                <Route exact path={this.props.match.url} component={Signin} />
+                <Route exact path={`${this.props.match.url}/signup`} component={Signup} />
             </div>
 
         )

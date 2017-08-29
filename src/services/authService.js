@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const rootURL = 'http://52.187.29.173:3002/api/';
+const rootURL = 'http://mango-tree.xyz:3002/api/';
 axios.defaults.headers.common['Content-Type'] = "application/json"
 /*axios.defaults.headers['Access-Control-Allow-Methods'] = "GET, POST, OPTIONS";
 axios.defaults.headers['Access-Control-Max-Age'] = "3600";

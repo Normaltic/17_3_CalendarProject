@@ -32,14 +32,16 @@ class CalendarContainer extends React.Component {
         return (
             
             <div className="containers" id="CalendarTable" >
+
+                <p>{`${this.props.nowDate.getFullYear()} - ${this.props.nowDate.getMonth()}`}</p>
                 
-                    {this.props.MonthDataasd.map( (item, i) => {
-                        
-                        return <OneWeekItem weekItem={item}
-                                        key={i} 
-                                        weekCount={this.props.MonthDataasd.length}
-                                        is_logged_in={this.props.is_logged_in}/>
-                    })}
+                {this.props.MonthDataasd.map( (item, i) => {
+                    
+                    return <OneWeekItem weekItem={item}
+                                    key={i} 
+                                    weekCount={this.props.MonthDataasd.length}
+                                    is_logged_in={this.props.is_logged_in}/>
+                })}
 
             </div>         
         );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+// import { browserHistory } from 'react-router';
 import * as actions from '../../reducers/Auth';
 
 class SignUp extends React.Component {
@@ -30,7 +30,7 @@ class SignUp extends React.Component {
         .then( () => {
             if( this.props.is_register == 'Success' ) {
                 Materialize.toast('Register', 2500);
-                browserHistory.push('/auth');
+                this.props.history.push('/auth');
             } else {
                 let message = '';
                 switch( this.props.is_register ) {

@@ -14,7 +14,7 @@ class OneDayItem extends React.Component {
 
     componentDidMount() {
         //$('.modal-trigger').leanModal('open');
-        if( this.props.is_logged_in ) $('.modal-trigger').leanModal('open');
+        if( this.props.is_logged_in ) $('.modal').modal();
     }
 
     handleClick() {

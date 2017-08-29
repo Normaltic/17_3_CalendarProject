@@ -9,3 +9,14 @@
 .addModal-trigger {
     cursor: pointer;
 }
+
+.Childrens {
+    padding-left: 300px;
+    padding-right: 15px;
+}
+
+@media only screen and ( max-width : 992px ) {
+    .Childrens {
+        padding-left: 0px;
+    }
+}

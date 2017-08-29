@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory, Link } from 'react-router';
+import { browserHistory, Link } from 'react-router-dom';
 import * as actions from '../../reducers/Auth';
 
 class SignIn extends React.Component {
@@ -25,7 +25,8 @@ class SignIn extends React.Component {
         .then( () => {
             if( this.props.is_logged_in == 'Success' ) {
                 Materialize.toast('Login', 2500);
-                browserHistory.push('/');
+                // browserHistory.push('/');
+                this.props.history.push('/');
             } else {
                 let message = '';
                 switch( this.props.is_logged_in ) {
@@ -56,7 +57,7 @@ class SignIn extends React.Component {
                         onChange={this.handleChange} />
                 <button className="waves-effect waves-light btn"
                         onClick={this.handleLogin} > LogIn </button>
-                <Link to="/auth/signup" className="waves-effect waves-light btn"> Register </Link>
+                <Link to={`${this.props.match.url}/signup`} className="waves-effect waves-light btn"> Register </Link>
             </div>
         )
     }
