@@ -20,6 +20,10 @@ Materialize css 사용 <br />
 
 # Version
 
+## 1.3
+sidenav_fixed를 통한 SideMenu 고정 ( 모바일에서 숨김 ) <br />
+react-router v3 => v4 버전 업
+
 ## 1.2
 redux 구조를 ducks로 변경 <br />
 로그인, 회원가입, 일정추가 구현 <br />
