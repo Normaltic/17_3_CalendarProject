@@ -1,0 +1,33 @@
+.SideMenu_Logo {
+    text-align: center;
+    padding-top: 10%;
+    padding-bottom: 15%;
+    text-shadow: -1px 0 #000000, 0 1px #000000, 1px 0 #000000, 0 -1px #000000;
+    -moz-text-shadow: -1px 0 #000000, 0 1px #000000, 1px 0 #000000, 0 -1px #000000;
+    -webkit-text-shadow: -1px 0 #000000, 0 1px #000000, 1px 0 #000000, 0 -1px #000000;
+}
+
+.SideMenu_Divider {
+    background: #42a5f5;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 2px;
+}
+
+.SideMenu_Items {
+    color: black;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    padding-left: 10%;
+}
+
+.SideMenu_Items li:active, .SideMenu_Items li.active {
+    background: #969696;
+}
+
+.SideMenu_Items li span{
+    color: #313131;
+    padding-left: 10%;
+    font-size: 25px;
+    font-weight: normal;
+}

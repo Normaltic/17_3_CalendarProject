@@ -1,0 +1,54 @@
+Html Webpack Plugin:
+<pre>
+  Error: Parse Error: <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materi  alize/0.97.6/css/materialize.min.css"  media="screen,projection"/ /> 
+          <!--Let browser know website is optimized for mobile--> 
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+          <title>Calendar</title> 
+      <link href="/static/css/main.83f9cf2f.css" rel="stylesheet"></head> 
+      <body> 
+          <div id="root"> 
+          </div> 
+          <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> 
+          <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/mater  ialize.min.js"></script> 
+          <script src="bundle.js"> 
+          </script> 
+      <script type="text/javascript" src="/static/js/main.33a34cd5.js"></script></body> 
+  </html>
+  
+  - htmlparser.js:235 new HTMLParser
+    [CalendarProject]/[html-minifier]/src/htmlparser.js:235:13
+  
+  - htmlminifier.js:946 minify
+    [CalendarProject]/[html-minifier]/src/htmlminifier.js:946:3
+  
+  - htmlminifier.js:1299 exports.minify
+    [CalendarProject]/[html-minifier]/src/htmlminifier.js:1299:10
+  
+  - index.js:296 
+    [CalendarProject]/[html-webpack-plugin]/index.js:296:16
+  
+  - util.js:16 tryCatcher
+    [CalendarProject]/[bluebird]/js/release/util.js:16:23
+  
+  - promise.js:512 Promise._settlePromiseFromHandler
+    [CalendarProject]/[bluebird]/js/release/promise.js:512:31
+  
+  - promise.js:569 Promise._settlePromise
+    [CalendarProject]/[bluebird]/js/release/promise.js:569:18
+  
+  - promise.js:614 Promise._settlePromise0
+    [CalendarProject]/[bluebird]/js/release/promise.js:614:10
+  
+  - promise.js:693 Promise._settlePromises
+    [CalendarProject]/[bluebird]/js/release/promise.js:693:18
+  
+  - async.js:133 Async._drainQueue
+    [CalendarProject]/[bluebird]/js/release/async.js:133:16
+  
+  - async.js:143 Async._drainQueues
+    [CalendarProject]/[bluebird]/js/release/async.js:143:10
+  
+  - async.js:17 Immediate.Async.drainQueues
+    [CalendarProject]/[bluebird]/js/release/async.js:17:14
+  
+</pre>

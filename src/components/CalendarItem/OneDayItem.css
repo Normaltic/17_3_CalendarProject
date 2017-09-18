@@ -1,0 +1,25 @@
+.oneDay {
+    border: 1px solid #000000;
+    font-size: 15px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.false {
+    filter: alpha(opacity(80));
+    opacity: 0.5
+}
+
+.dayDate {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.holiday {
+    color: red;
+}
+
+p.sche {
+    margin-left: 6%;
+}

@@ -1,0 +1,26 @@
+.row {
+    margin-bottom: 0;
+}
+
+.navIconSet {
+    margin-top: 4px;
+}
+
+.addModal-trigger {
+    cursor: pointer;
+}
+
+.Childrens {
+    padding-left: 300px;
+    padding-right: 15px;
+}
+
+@media only screen and ( max-width : 992px ) {
+    .Childrens {
+        padding-left: 0px;
+    }
+}
+
+.asd {
+    background: #ee6e73;
+}
