@@ -31,3 +31,12 @@
     font-size: 25px;
     font-weight: normal;
 }
+
+.SideMenu_Items .SideMenu_Groups {
+    padding-left: 20%;
+    text-align: center;
+}
+
+.link-disable {
+    pointer-events: none;
+}

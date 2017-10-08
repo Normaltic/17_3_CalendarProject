@@ -58,9 +58,9 @@ export const handleMonth = (date, is_logged_in, include_shared = true, groupList
     } else dispatch(handleMonthAction(date));
 }
 
-export const setViewOptionAndRefresh = (viewOption, handleMonthOption) => dispatch => {
-    
-}
+// export const setViewOptionAndRefresh = (viewOption, handleMonthOption) => dispatch => {
+
+// }
 
 // export const refreshMonthData = (date) => dispatch => {
 //     service.getMonthSchedule(true, date.year(), date.month()+1 )

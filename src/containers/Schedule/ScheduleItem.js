@@ -1,11 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import './ScheduleItem.css';
 
-const ScheduleItem = ( { itemData, history } ) => {
+const ScheduleItem = (props) => {
 
-    return (
+    let { itemData, history } = props;
 
+    return (                                                                                                                                                                                                                                                                                                                                       
         <div className="ScheduleItems">
             <button onClick={ () => history.goBack()} >Back</button>
             <div> {`Title : ${itemData.title}`}</div>
@@ -25,4 +27,8 @@ ScheduleItem.defaultProps = {
     is_sche: true
 }
 
-export default ScheduleItem;
+const mapStateToProps = (state) => ({
+    userID: state.Account.get('userID')
+})
+
+export default connect(mapStateToProps)(ScheduleItem);

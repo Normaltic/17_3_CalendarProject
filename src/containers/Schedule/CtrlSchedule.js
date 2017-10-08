@@ -29,7 +29,8 @@ class CtrlSchedule extends React.Component {
                 users: [],
                 groups: '',
                 addUser: '',
-                addGroup: ''
+                addGroup: '',
+                fuck: ''
             }
         } else {
             let scheduleData = this.props.scheduleData;
@@ -61,16 +62,17 @@ class CtrlSchedule extends React.Component {
     }
 
     componentDidMount() {
-        // $('.datepicker').pickadate({
-        //     selectMonths: true, // Creates a dropdown to control month
-        //     selectYears: 15, // Creates a dropdown of 15 years to control year,
-        //     today: 'Today',
-        //     clear: 'Clear',
-        //     close: 'Ok',
-        //     closeOnSelect: true, // Close upon selecting a date,
-        //     onSet: {
-        //     }
-        // });
+        $('.datepicker').pickadate({
+            selectMonths: true, // Creates a dropdown to control month
+            selectYears: 15, // Creates a dropdown of 15 years to control year,
+            today: 'Today',
+            clear: 'Clear',
+            close: 'Ok',
+            closeOnSelect: true, // Close upon selecting a date,
+            onSelect: function(data) {
+                console.warn(data);
+            }
+        });
         $(document).ready(function() {
             $('select').material_select();
         });
@@ -82,7 +84,7 @@ class CtrlSchedule extends React.Component {
         if( e.target ) nextState[e.target.name] = e.target.value;
         else if ( e._isAMomentObject ) nextState['date'] = e;
         
-
+        console.log(nextState);
         this.setState(nextState);
     }
 
@@ -234,55 +236,55 @@ class CtrlSchedule extends React.Component {
                     </label>
                 </div>
 
-                {/*<input type="text" className="datepicker" name="groups" value={this.state.groups} onChange={this.handleChange} />*/}
+                <input type="text" className="datepicker" name="fuck" value={this.state.fuck} onChange={this.handleChange} />
                 {
                     this.state.is_share ? 
                         (
                             <div>
 
-                                <form action="#">
-                                    <p onClick={ () => this.setState({shareType: true}) }>
-                                        <input name="userID" type="radio" id="userIDRadio"/>
+                                <form action="">
+                                    <span onClick={ () => this.setState({shareType: true}) }>
+                                        <input name="userID" type="radio" id="userIDRadio" checked={this.state.shareType}/>
                                         <label >User ID</label>
-                                    </p>
-                                    <p onClick={ () => this.setState({shareType: false})}>
-                                        <input name="Group" type="radio" id="GroupRadio"/>
+                                    </span>
+                                    <span onClick={ () => this.setState({shareType: false})}>
+                                        <input name="Group" type="radio" id="GroupRadio" checked={!this.state.shareType}/>
                                         <label >Groups</label>
-                                    </p>
+                                    </span>
                                 </form>
 
                                 {
                                     this.state.shareType ?
-                                        (<div>
-                                            <input className="input-field" 
-                                                type="text" 
-                                                placeholder="Type add User ID" 
-                                                name="addUser" value={this.state.addUser}
-                                                onChange={this.handleChange} />
-                                            <button onClick={this._handleSearchUser}> add </button>
-                                            <ul>
-                                                {
-                                                    this.state.users.map( (item, i) => (
-                                                        <li key={i}>{item}</li>       
-                                                    ))
-                                                }
-                                            </ul>
-                                        </div>)
-                                    : 
-                                        (
-                                            <select className="browser-default" name="addGroup" value={this.state.addGroup} onChange={this.handleChange}>
-                                                <option value="">Choose your option</option>
-                                                {
-                                                    this.props.groupList.map( (item, i) => (
-                                                        <option key={i} value={item}>{item}</option>
-                                                    ))
-                                                }
-                                            </select>
-                                        )
+
+                                    <div>
+                                        <input className="input-field" 
+                                            type="text" 
+                                            placeholder="Type add User ID" 
+                                            name="addUser" value={this.state.addUser}
+                                            onChange={this.handleChange} />
+                                        <button onClick={this._handleSearchUser}> add </button>
+                                        <ul>
+                                            {
+                                                this.state.users.map( (item, i) => (
+                                                    <li key={i}>{item}</li>       
+                                                ))
+                                            }
+                                        </ul>
+                                    </div>
+                                    :     
+                                    <select className="browser-default" name="addGroup" value={this.state.addGroup} onChange={this.handleChange}>
+                                        <option value="">Choose your option</option>
+                                        {
+                                            this.props.groupList.map( (item, i) => (
+                                                <option key={i} value={item}>{item}</option>
+                                            ))
+                                        }
+                                    </select>
                                 }
                                 <br />
                             </div>
-                        ) : null
+                        ) 
+                    : null
                 }
 
                 <button className="waves-effect waves-light btn"

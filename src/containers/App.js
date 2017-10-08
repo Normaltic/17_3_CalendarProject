@@ -30,7 +30,9 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        $(".button-collapse").sideNav();
+        $(".button-collapse").sideNav({
+            closeOnClick: true
+        });
         $('.dropdown-button').dropdown({
             inDuration: 300,
             outDuration: 225,
@@ -100,7 +102,8 @@ class App extends React.Component {
 
                 <SideMenu className="side-nav fixed" id="side_nav"
                           groupList={this.props.groupList}
-                          setVoteListRequest={this.props.setVoteListRequest}  />
+                          setVoteListRequest={this.props.setVoteListRequest}
+                          handleClose={this.handleSideMenuClose}  />
 
                 <div className="row">
 

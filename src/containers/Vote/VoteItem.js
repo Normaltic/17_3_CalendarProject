@@ -21,10 +21,6 @@ class VoteItem extends React.Component {
         this._handleVote = this._handleVote.bind(this);
     }
 
-    componentWillMount() {
-
-    }
-
     _handleComments() {
         this.props.commitComments(this.props.voteData._id, this.state.commentWriting);
     }
@@ -51,7 +47,7 @@ class VoteItem extends React.Component {
 
         return (
             <div>
-                <ScheduleItem is_sche={false} itemData={voteData} />
+                <ScheduleItem is_sche={false} history={this.props.history} itemData={voteData} />
 
                 <div className="VoteItem_Divider" />
 

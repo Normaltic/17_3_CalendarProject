@@ -7,6 +7,7 @@ import * as ScheduleAction from '../../reducers/Schedule';
 import * as service from '../../services/authService';
 
 import CalendarContainer from '../CalendarContainer';
+import HandleBtn from '../../components/Button/Buttons';
 
 class GroupCalendar extends React.Component {
 
@@ -14,6 +15,8 @@ class GroupCalendar extends React.Component {
         super(props);
 
         this.handleScheduleView = this.handleScheduleView.bind(this);
+        this.handleNextMonth = this.handleNextMonth.bind(this);
+        this.handlePostMonth = this.handlePostMonth.bind(this);
     }
 
     componentWillMount() {
@@ -22,7 +25,20 @@ class GroupCalendar extends React.Component {
     }
 
     componentWillUnmount() {
-        // this.props.handleMonth(moment(), 'Success');
+        let { share, groupList } = this.props.viewOption;
+        this.props.handleMonth(moment(), 'Success', share, groupList);
+    }
+
+    handleNextMonth() {
+        let nowDate = this.props.nowDate;
+        nowDate.add(1, 'M');
+        this.props.handleMonthGroup(this.props.match.params.groupName, nowDate);
+    }
+
+    handlePostMonth() {
+        let nowDate = this.props.nowDate;
+        nowDate.add(-1, 'M');
+        this.props.handleMonthGroup(this.props.match.params.groupName, nowDate);
     }
 
     handleScheduleView(scheData) {
@@ -32,15 +48,21 @@ class GroupCalendar extends React.Component {
 
     render() {
         return (
-            <CalendarContainer 
-                handleSelectSchedule={this.handleScheduleView} />
+            <div>
+                <HandleBtn 
+                    showNextMonth={this.handleNextMonth} 
+                    showPostMonth={this.handlePostMonth} />
+                <CalendarContainer 
+                    handleSelectSchedule={this.handleScheduleView} />
+            </div>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
     nowDate: state.Calendar.get('nowDate'),
-    nowMonthData: state.Calendar.get('nowMonthData')
+    nowMonthData: state.Calendar.get('nowMonthData'),
+    viewOption: state.Calendar.get('viewOption')
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -49,4 +71,4 @@ const mapDispatchToProps = (dispatch) => ({
     setSelectedSchedule: (scheduleData) => dispatch(ScheduleAction.selectSchedule(scheduleData))
 })
 
-export default connect(undefined, mapDispatchToProps)(GroupCalendar);
+export default connect(mapStateToProps, mapDispatchToProps)(GroupCalendar);

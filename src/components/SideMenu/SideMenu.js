@@ -23,15 +23,15 @@ class SideMenu extends React.Component {
                     <li><NavLink to={""}><i className="small material-icons">home</i><span>Home</span></NavLink></li>
                     <li><NavLink onClick={this.props.setVoteListRequest} to={"/voteList"} activeClassName="active"><i className="small material-icons">date_range</i><span>Vote</span></NavLink></li>
                     <li><NavLink to={"/createSchedule"} activeClassName="active"><i className="small material-icons">search</i><span>Search</span></NavLink></li>
-                    <li><NavLink to={""} ><i className="small material-icons">group</i><span>Group</span></NavLink></li>
+                    <li className="link-disable"><NavLink to={""} ><i className="small material-icons">group</i><span>Group</span></NavLink></li>
 
                     {
                         this.props.groupList.map( (item,i) => (
-                            <li key={i}><NavLink to={`/group/view/${item}`} >{item}</NavLink></li>
+                            <li key={i}><NavLink className="SideMenu_Groups" to={`/group/view/${item}`} >{item}</NavLink></li>
                         ))
                     }
 
-                    <li><NavLink to={'/group/create'}><i className="small material-icons">add</i></NavLink></li>
+                    <li><NavLink className="SideMenu_Groups" to={'/group/create'}>+</NavLink></li>
                 </ul>
             </div>
 
