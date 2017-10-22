@@ -11,12 +11,12 @@ import * as CalendarAction from '../../reducers/Calendar';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'rc-time-picker/assets/index.css';
 
+import './CtrlSchedule.css';
+
 class CtrlSchedule extends React.Component {
 
     constructor(props) {
         super(props);
-
-
 
         if( this.props.is_create ) {
             this.state = {
@@ -42,7 +42,7 @@ class CtrlSchedule extends React.Component {
                 registrant: scheduleData.registrant,
                 date: moment(scheduleData.date),
                 is_share: scheduleData.is_share,
-                shareType: scheduleData.users ? true : false ,
+                shareType: scheduleData.users.length ? true : false ,
                 users: scheduleData.users,
                 groups: scheduleData.groups,
                 addUser: '',
@@ -52,6 +52,7 @@ class CtrlSchedule extends React.Component {
         
         this.handleChange = this.handleChange.bind(this);
         this._handleError = this._handleError.bind(this);
+        this._handleShareType = this._handleShareType.bind(this);
         this._handleSwitch = this._handleSwitch.bind(this);
 
         this._handleSchedule = this._handleSchedule.bind(this);
@@ -62,17 +63,42 @@ class CtrlSchedule extends React.Component {
     }
 
     componentDidMount() {
-        $('.datepicker').pickadate({
-            selectMonths: true, // Creates a dropdown to control month
-            selectYears: 15, // Creates a dropdown of 15 years to control year,
-            today: 'Today',
-            clear: 'Clear',
-            close: 'Ok',
-            closeOnSelect: true, // Close upon selecting a date,
-            onSelect: function(data) {
-                console.warn(data);
-            }
-        });
+        // $('.datepicker').pickadate({
+        //     selectMonths: true, // Creates a dropdown to control month
+        //     selectYears: 15, // Creates a dropdown of 15 years to control year,
+        //     today: 'Today',
+        //     clear: 'Clear',
+        //     close: 'Ok',
+        //     closeOnSelect: true, // Close upon selecting a date,
+        //     onSet: function(data) {
+        //         console.warn(moment(data.select));
+        //     }
+        // });
+
+        // $('.timepicker').pickatime({
+        //     default: 'now', // Set default time: 'now', '1:30AM', '16:30'
+        //     fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+        //     twelvehour: false, // Use AM/PM or 24-hour format
+        //     donetext: 'OK', // text for done-button
+        //     cleartext: 'Clear', // text for clear-button
+        //     canceltext: 'Cancel', // Text for cancel-button
+        //     autoclose: true, // automatic close timepicker
+        //     ampmclickable: true, // make AM PM clickable
+        //     aftershow: function(){}, //Function for after opening timepicker
+        //     onSet: function(data) {
+        //         console.warn("Set");
+        //     },
+        //     onSelect: function(data) {
+        //         console.warn("select");
+        //     },
+        //     onClose: function(data) {
+        //         console.warn("close");
+        //     },
+        //     onChange: function(data) {
+        //         console.warn("change");
+        //     }
+        // });
+
         $(document).ready(function() {
             $('select').material_select();
         });
@@ -80,11 +106,20 @@ class CtrlSchedule extends React.Component {
 
     handleChange(e) {
         let nextState = {};
+        console.warn(e)
 
         if( e.target ) nextState[e.target.name] = e.target.value;
         else if ( e._isAMomentObject ) nextState['date'] = e;
         
         console.log(nextState);
+        this.setState(nextState);
+    }
+
+    _handleShareType(e) {
+        let nextState = {
+            shareType: e
+        }
+
         this.setState(nextState);
     }
 
@@ -97,6 +132,7 @@ class CtrlSchedule extends React.Component {
     _handleError() {
         let message = '';
         if( this.state.is_share && !this.state.users.length && !this.state.addGroup ) message = "공유할 대상을 추가 해 주세요";
+        else if( !this.state.title ) message = "일정의 제목을 입력 해 주세요";
         
         if( message ) {
             Materialize.toast(message, 2500);
@@ -112,17 +148,25 @@ class CtrlSchedule extends React.Component {
 
         let scheduleData = this.state;
 
+        if( !scheduleData.is_share ) {
+            scheduleData.users = [];
+            scheduleData.shareType = true;
+        }
+
+        scheduleData.date = scheduleData.date.toDate();
+
         if( this.props.is_create ) {
 
-            if( !this.state.shareType ) {
+            if( !scheduleData.shareType ) {
                 scheduleData.users = [];
                 scheduleData.groups = [scheduleData.addGroup];
-            }
+            } else scheduleData.groups = [];
 
             service.createSchedule(scheduleData)
                    .then( (response) => {
                         if( response.data.result ) {
-                            this.props.handleMonth(this.state.date, 'Success');
+                            let date = moment(scheduleData.date);
+                            this.props.handleMonth(date, 'Success', true, this.props.viewOption.groupList);
                             Materialize.toast('Success Create Schedule', 2500);
                             this.props.history.push('/');
                         } else {
@@ -136,7 +180,8 @@ class CtrlSchedule extends React.Component {
             service.updateSchedule(scheduleData)
                    .then( (response) => {
                        if( response.data.result ) {
-                           this.props.handleMonth(this.state.date, 'Success');
+                           let date = moment(scheduleData.date);
+                           this.props.handleMonth(date, 'Success', this.props.viewOption.groupList);
                            Materialize.toast('Success Update Schedule', 2500);
                            this.props.history.push('/');
                        } else {
@@ -150,20 +195,40 @@ class CtrlSchedule extends React.Component {
     }
 
     _handleCreateVote() {
-
         if( !this._handleError() ) return;
 
+        let voteData = this.state;
+
+        if( !voteData.shareType ) {
+            voteData.users = [];
+            voteData.groups = [voteData.addGroup];
+        } else voteData.groups = [];
+
+        voteData.date = voteData.date.toDate();
+        console.warn(voteData.date);
+
+        service.createVote(voteData)
+               .then( (response) => {
+                   if( response.data.result ) {
+                       Materialize.toast('Success Create Vote', 2500);
+                       this.props.history.push('/voteList');
+                   } else {
+                       console.warn(response.data);
+                   }
+               })
+               .catch( (err) => {
+                   console.warn(err);
+               });
     }
 
     _handleSearchUser() {
-        for( let userID in this.state.users ) {
-            if( userID == this.state.addUser ) {
-                Materialize.toast('Already added User');
-                this.setState({
-                    addUser: ''
-                })
-                return;
-            }
+
+        if( this.state.users.indexOf(this.state.addUser) != -1 ) {
+            Materialize.toast('Already added User');
+            this.setState({
+                addUser: ''
+            })
+            return;
         }
         service.SearchAccount(this.state.addUser)
                 .then( (response) => {
@@ -186,77 +251,99 @@ class CtrlSchedule extends React.Component {
 
     render() {
 
-        return (
-            
+        const Items = (iconName, inputName, placeholder) => {
+            return (
+                <div className="CtrlSchedule_inDIV row">
+                    <div className="col s1">
+                        <i className="inputItemIcon material-icons">{iconName}</i>
+                    </div>
+                    <div className="col s11">
+                        <input className="input-field" 
+                            type="text" 
+                            placeholder={placeholder} 
+                            name={inputName} value={this.state[inputName]}
+                            onChange={this.handleChange} />
+                    </div>
+                </div> 
+            )
+        }
 
+        return (
+        
             <div className="ScheduleinputList">
 
-                <button onClick={ () => this.props.history.goBack() } className="waves-effect waves-light btn"> Back </button>
+                <div className="ButtonDIV row">
+                    <button onClick={ () => this.props.history.goBack() } 
+                            className="col push-s11 pushwaves-effect waves-light btn"> Back </button>
+                </div>
+                
+                {Items('label_outline', 'title', 'Title')}
+                {Items('description', 'intro', 'Description')}
+                {Items('place', 'place', 'Place')}
+                <div className="CtrlSchedule_inDIV row">
+                    <div className="col s1">
+                        <i className="inputItemIcon material-icons">query_builder</i>
+                    </div>
+                    <div className="col s11">
+                        <DatePicker
+                            selected={this.state.date}
+                            dateFormat="YYYY/MM/DD"
+                            onChange={this.handleChange}
+                            placeholderText="Date"
+                            popperModifiers={{
+                                offset: {
+                                    enable: true,
+                                    offset: '0px, 0px'
+                                }
+                            }} />
+                    </div>
+                </div>
+                <div className="CtrlSchedule_inDIV row">
+                    <div className="col s1">
+                        <br />
+                    </div>
+                    <div className="col s11">
+                        <TimePicker
+                            value={this.state.date}
+                            onChange={this.handleChange} />
+                    </div>
+                </div>
 
-                <input className="input-field" 
-                    type="text" 
-                    placeholder="Title" 
-                    name="title" value={this.state.title}
-                    onChange={this.handleChange} />
+                <div className="CtrlSchedule_Divider" />
 
-                <input className="input-field" 
-                    type="text" 
-                    placeholder="Description" 
-                    name="intro" value={this.state.intro}
-                    onChange={this.handleChange} />
-
-                <input className="input-field" 
-                    type="text" 
-                    placeholder="Place" 
-                    name="place" value={this.state.place}
-                    onChange={this.handleChange} />
-
-                <DatePicker
-                    selected={this.state.date}
-                    dateFormat="YYYY/MM/DD"
-                    onChange={this.handleChange}
-                    placeholderText="Date"
-                    popperModifiers={{
-                        offset: {
-                            enable: true,
-                            offset: '0px, 0px'
-                        }
-                    }} />
-
-                <TimePicker
-                    value={this.state.date}
-                    onChange={this.handleChange} />
-
-                <div className="switch">
+                <div className="CtrlSchedule_inDIV switch">
                     <label>
                         No
-                        <input type="checkbox" onClick={this._handleSwitch}/>
+                        <input type="checkbox" checked={this.state.is_share} onChange={this._handleSwitch}/>
                         <span className="lever" ></span>
                         Share
                     </label>
                 </div>
-
-                <input type="text" className="datepicker" name="fuck" value={this.state.fuck} onChange={this.handleChange} />
                 {
                     this.state.is_share ? 
                         (
                             <div>
-
-                                <form action="">
-                                    <span onClick={ () => this.setState({shareType: true}) }>
-                                        <input name="userID" type="radio" id="userIDRadio" checked={this.state.shareType}/>
-                                        <label >User ID</label>
-                                    </span>
-                                    <span onClick={ () => this.setState({shareType: false})}>
-                                        <input name="Group" type="radio" id="GroupRadio" checked={!this.state.shareType}/>
-                                        <label >Groups</label>
-                                    </span>
-                                </form>
+                                <div className="CtrlSchedule_inDIV">
+                                    <form action="#">
+                                        <span onClick={ () => this._handleShareType(true)}>
+                                            <input name="userID" type="radio" id="userIDRadio"
+                                                checked={this.state.shareType}
+                                                onChange={() => {}} />
+                                            <label>User ID</label>
+                                        </span>
+                                        <span onClick={ () => this._handleShareType(false)}>
+                                            <input name="Group" type="radio" id="GroupRadio" 
+                                                checked={!this.state.shareType}
+                                                onChange={() => {}} />
+                                            <label >Groups</label>
+                                        </span>
+                                    </form>
+                                </div>
 
                                 {
                                     this.state.shareType ?
 
-                                    <div>
+                                    <div className="CtrlSchedule_inDIV">
                                         <input className="input-field" 
                                             type="text" 
                                             placeholder="Type add User ID" 
@@ -272,7 +359,7 @@ class CtrlSchedule extends React.Component {
                                         </ul>
                                     </div>
                                     :     
-                                    <select className="browser-default" name="addGroup" value={this.state.addGroup} onChange={this.handleChange}>
+                                    <select className="CtrlSchedule_inDIV browser-default" name="addGroup" value={this.state.addGroup} onChange={this.handleChange}>
                                         <option value="">Choose your option</option>
                                         {
                                             this.props.groupList.map( (item, i) => (
@@ -290,7 +377,7 @@ class CtrlSchedule extends React.Component {
                 <button className="waves-effect waves-light btn"
                     onClick={this._handleSchedule} > { this.props.is_create ? 'Create' : 'Update' } </button>
                 {
-                    this.state.is_share ?
+                    this.state.is_share && this.props.is_create ?
                         <button className="waves-effect waves-light btn"
                             onClick={this._handleCreateVote}> Vote </button>
                         : null
@@ -314,12 +401,13 @@ CtrlSchedule.defaultProps = {
 }
 
 const mapStateToProps = (state) => ({
-    groupList: state.Account.get('groupList')
+    groupList: state.Account.get('groupList'),
+    viewOption: state.Calendar.get('viewOption')
 })
 
 const mapDispatchToProps = (dispatch) => ({
     refreshMontheData: (date) => dispatch(CalendarAction.refreshMonthData(date)),
-    handleMonth: (date, is_logged_in) => dispatch(CalendarAction.handleMonth(date, is_logged_in))
+    handleMonth: (date, is_logged_in, include_shared, groupList) => dispatch(CalendarAction.handleMonth(date, is_logged_in, include_shared, groupList))
 })
 
 

@@ -42,6 +42,10 @@ export function createSchedule(scheduleData) {
     return axios.post(`${rootURL + schedule}/create`, scheduleData);
 }
 
+export function deleteSchedule(sche) {
+    return axios.post(`${rootURL + schedule}/delete`, sche)
+}
+
 export function updateSchedule(scheduleData) {
     return axios.post(`${rootURL + schedule}/update`, scheduleData);
 }
@@ -60,6 +64,19 @@ export function getMonthSchedule(include_shared, year, month, groupList) {
 }
 
 //////---------------------------------------------------------------------
+export function createVote(voteData) {
+    return axios.post(`${rootURL + vote}/create`, voteData);
+}
+
+export function updateVote(voteData) {
+    return axios.post(`${rootURL + vote}/update`, voteData);
+}
+
+export function deleteVote(voteID) {
+    return axios.post(`${rootURL + vote}/delete/`, {
+        voteID: voteID
+    });
+}
 
 export function getVoteList() {
     return axios.get(`${rootURL + vote}/getVoteList`);

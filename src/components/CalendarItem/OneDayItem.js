@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 import './OneDayItem.css';
 
@@ -42,9 +43,9 @@ class OneDayItem extends React.Component {
                         this.props.dayData.map( (item, i) => (
                             <li className="collection-item" key={i} name={i} onClick={ () => this.handleClick(i) }>
                                 <h4 name={i}>{item.title}</h4>
-                                <p className="sche desc" name={i}>{item.intro}</p>
-                                <p className="sche date hide-on-med-and-down">{item.date}</p>
-                                <p className="sche place hide-on-med-and-down">{item.place}</p>
+                                <p className="sche desc" name={i}><i className="DayCollection_Icon material-icons hide-on-med-and-down">description</i>{item.intro}</p>
+                                <p className="sche date hide-on-med-and-down"><i className="DayCollection_Icon material-icons">access_time</i>{moment(item.date).format('LLLL')}</p>
+                                <p className="sche place hide-on-med-and-down"><i className="DayCollection_Icon material-icons">place</i>{item.place}</p>
                             </li>   
                         ))
                     }
@@ -54,7 +55,6 @@ class OneDayItem extends React.Component {
 
         return (
             <div className={`oneDay`} id="oneDay" style={{height: '100%'}}>
-
                 <div className={`modal-trigger ${this.props.is_nowMonth}` } data-target={this.state.componentKey} style={{height: '100%'}}>
                     <div className={`dayDate ${this.props.is_holiday}`}>{this.props.date}</div>
                     <ul className="eventList">
@@ -65,11 +65,7 @@ class OneDayItem extends React.Component {
                 {this.props.is_logged_in == 'Success'? (
                     <div id={this.state.componentKey} className="modal">
                         <div className="modal-content">
-                            {this.state.componentKey}
                             {spreadScheduleCollections()}
-                        </div>
-                        <div className="modal-footer">
-                            <a href="" className="modal-action modal-close waves-effect waves-green btn-flat "> - </a>
                         </div>
                     </div>
                 ) : null }

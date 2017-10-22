@@ -27,8 +27,11 @@ class Auth extends React.Component {
         return (
 
             <div className="row Background grey lighten-3" id="AuthParent">
-                <Route exact path={this.props.match.url} component={Signin} />
-                <Route exact path={`${this.props.match.url}/signup`} component={Signup} />
+                <div className="col s1 m4 l4 l4 xl4"> <br /> </div>
+                <div className="AuthComponents col s10 m4 l4 xl4">
+                    <Route exact path={this.props.match.url} component={Signin} />
+                    <Route exact path={`${this.props.match.url}/signup`} component={Signup} />
+                </div>
             </div>
 
         )

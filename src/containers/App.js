@@ -41,7 +41,7 @@ class App extends React.Component {
             gutter: 0, // Spacing from edge
             belowOrigin: false, // Displays dropdown below the button
             alignment: 'left', // Displays dropdown with edge aligned to the left of button
-            stopPropagation: false // Stops event propagation
+            stopPropagation: true // Stops event propagation
             }
         );
         
@@ -77,11 +77,12 @@ class App extends React.Component {
 
             <ul id="nav-mobile" className="right navIconSet">
                 <li><Link to={"/auth"}><i className="material-icons">{ is_logged_in ? "lock_outline" : "lock_open" }</i></Link></li>
-                {this.props.is_logged_in == 'Success' ? <li><Link to ={"/schedule/create"}><i className="material-icons">note_add</i></Link></li> : null }
+                <li><Link to ={"/schedule/create"}><i className="material-icons">note_add</i></Link></li>
+                {/*{this.props.is_logged_in == 'Success' ? <li><Link to ={"/schedule/create"}><i className="material-icons">note_add</i></Link></li> : null }*/}
                 {this.props.is_logged_in == 'Success' ? <a className='dropdown-button btn' href='#' data-activates='dropdown1'>Drop Me!</a> : null}
                   <ul id='dropdown1' className='dropdown-content'>
-                    <li><a href="#!">one</a></li>
-                    <li><a href="#!">two</a></li>
+                    <li>>one</li>
+                    <li>two</li>
                     <li className="divider"></li>
                     <li><a href="#!">three</a></li>
                     <li><a href="#!"><i className="material-icons">view_module</i>four</a></li>
@@ -107,7 +108,7 @@ class App extends React.Component {
 
                 <div className="row">
 
-                    <div className="Childrens grey lighten-5" style={{height: '100%'}}>
+                    <div className="Childrens" style={{height: '100%'}}>
 
                         <Route exact path={this.props.match.url} render={ () => (
                             <div className="" style={{height: '100%'}}>

@@ -1,8 +1,16 @@
 .VoteItem_Divider {
     background: black;
-    margin-left: 5%;
-    margin-top: 2%;
-    margin-right: 5%;
-    margin-bottom: 2%;
+    margin-top: 4%;
+    margin-bottom: 4%;
+    margin-left: 2%;
+    margin-right: 2%;
     height: 1px;
+}
+
+.VoteItem_ItemDiv {
+    margin-left: 3%;
+}
+
+.ButtonDIV {
+    margin-bottom: 3%;
 }

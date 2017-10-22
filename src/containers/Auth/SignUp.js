@@ -46,34 +46,37 @@ class SignUp extends React.Component {
 
     render() {
         return (
-            <div className="row SignBox">
+            <div className="card SignBox">
+                <div className="card-content row">
                 
-                <input className="input-field col s8 m6 l4 xl4 offset-s2-m3-l4-xl4" 
-                        type="text" 
-                        placeholder="User ID" 
-                        name="userID" value={this.state.userID}
-                        onChange={this.handleChange} />
-                <input className="input-field col s8 m6 l4 xl4" 
-                        type="text" 
-                        placeholder="Password" 
-                        name="password" value={this.state.password}
-                        onChange={this.handleChange} />
-                <input className="input-field col s8 m6 l4 xl4"
-                        type="text"
-                        placeholder="Name"
-                        name="name"
-                        value={this.state.name}
-                        onChange={this.handleChange} />
-                <input className="input-box col s8 m6 l4 xl4"
-                        type="text"
-                        placeholder="Intro"
-                        name="intro"
-                        value={this.state.intro}
-                        onChange={this.handleChange} />
+                    <input className="input-field col s10 push-s1" 
+                            type="text" 
+                            placeholder="User ID" 
+                            name="userID" value={this.state.userID}
+                            onChange={this.handleChange} />
+                    <input className="input-field col s10 push-s1" 
+                            type="text" 
+                            placeholder="Password" 
+                            name="password" value={this.state.password}
+                            onChange={this.handleChange} />
+                    <input className="input-field col s10 push-s1"
+                            type="text"
+                            placeholder="Name"
+                            name="name"
+                            value={this.state.name}
+                            onChange={this.handleChange} />
+                    <input className="input-box col s10 push-s1"
+                            type="text"
+                            placeholder="Intro"
+                            name="intro"
+                            value={this.state.intro}
+                            onChange={this.handleChange} />
+                </div>
 
-                <button className="waves-effect waves-light btn"
-                        onClick={this.handleRegister} > Register </button>
-                
+                <div className="card-action">
+                    <button className="waves-effect waves-light btn"
+                            onClick={this.handleRegister} > Register </button>
+                </div>
             </div>
         )
     }

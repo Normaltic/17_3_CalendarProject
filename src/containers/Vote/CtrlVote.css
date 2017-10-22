@@ -1,0 +1,39 @@
+.ScheduleinputList {
+    margin-top: 2%;
+    margin-left: 6%;
+    margin-right: 6%;
+}
+
+.ButtonDIV {
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+.inputItemIcon {
+    margin-top: 20%;
+    padding-top: 10px;
+}
+
+.CtrlSchedule_inDIV {
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+.input-field {
+    
+}
+
+.CtrlVote_Divider {
+    background: black;
+    height: 3px;
+
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+@media only screen and ( min-width : 992px ) {
+    .inputItemIcon {
+        padding-left: 60%;
+        padding-top: 0%;
+    }
+}

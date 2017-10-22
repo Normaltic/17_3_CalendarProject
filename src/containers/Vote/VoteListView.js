@@ -13,7 +13,7 @@ class VoteListView extends React.Component {
     }
 
     componentWillMount() {
-        console.log(this.props.match.url);
+        console.warn("Fuck");
         this.props.setVoteListRequest();
     }
 
@@ -34,11 +34,14 @@ class VoteListView extends React.Component {
                 )} />
 
                 <Route path={`${this.props.match.url}/itemView`} render={ ( {history} ) => (
-                    <VoteItem history={history} voteData={this.props.nowSelectedVote} />
+                    <VoteItem history={history} voteData={this.props.nowSelectedVote}
+                                setVoteListRequest={this.props.setVoteListRequest} 
+                                viewOption={this.props.viewOption} />
                 )} />
 
                 <Route path={`${this.props.match.url}/update`} render={ ( {history} ) => (
-                    <CtrlVote history={history} voteData={this.props.nowSelectedVote} />
+                    <CtrlVote history={history} voteData={this.props.nowSelectedVote}
+                                setVoteListRequest={this.props.setVoteListRequest} />
                 )} />
 
             </div>
@@ -48,7 +51,8 @@ class VoteListView extends React.Component {
 
 const mapStateToProps = (state) => ({
     voteList: state.Vote.get('voteList'),
-    nowSelectedVote: state.Vote.get('nowSelectedVote')
+    nowSelectedVote: state.Vote.get('nowSelectedVote'),
+    viewOption: state.Calendar.get('viewOption')
 })
 
 
