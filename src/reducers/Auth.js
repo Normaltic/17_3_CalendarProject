@@ -6,11 +6,15 @@ import * as services from '../services/authService';
 
 import * as CalendarAction from './Calendar';
 import * as AccountAction from './Account';
+import * as ScheduleAction from './Schedule';
+import * as VoteAction from './Vote';
 
 //Define Actions
 const LOGIN = 'auth/LOGIN';
 const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
 const LOGIN_FAILURE = 'auth/LOGIN_FAILURE';
+
+const LOGOUT = 'auth/LOGOUT';
 
 const REGISTER = 'auth/REGISTER';
 const REGISTER_SUCCESS = 'auth/REGISTER_SUCCESS';
@@ -22,6 +26,8 @@ const SOMETHING_WRONG = 'auth/SOMETHING_WRONG';
 export const Login = createAction(LOGIN); // {}
 export const LoginSuccess = createAction(LOGIN_SUCCESS); // { result, token }
 export const LoginFailure = createAction(LOGIN_FAILURE); // { result, error }
+
+export const Logout = createAction(LOGOUT);
 
 export const Register = createAction(REGISTER);
 export const RegisterSuccess = createAction(REGISTER_SUCCESS); // { result }
@@ -74,6 +80,14 @@ export const RegisterRequest = (userID, password, name, intro) => (dispatch) => 
            })
 }
 
+export const LogoutAction = () => (dispatch) => {
+	dispatch(Logout());
+	dispatch(AccountAction.setInitialize());
+	dispatch(ScheduleAction.setInitialize());
+	dispatch(VoteAction.setInitialize());
+	dispatch(CalendarAction.setInitialCalendar());
+}
+
 export default handleActions({
 
     [LOGIN]: (state, action) => {
@@ -97,6 +111,11 @@ export default handleActions({
     [REGISTER_FAILURE]: (state, action) => {
         return state.set('is_register', action.payload.error);
     },
+	[LOGOUT]: (state, action) => {
+		return state.set('is_logged_in', '')
+					.set('is_register', '')
+					.set('token', '');
+	},
 
     [SOMETHING_WRONG]: (state, action) => {
         console.warn(action.payload.error);

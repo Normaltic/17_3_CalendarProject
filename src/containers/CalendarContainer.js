@@ -17,15 +17,16 @@ class CalendarContainer extends React.Component {
 
     componentDidMount() {
         $("#CalendarTable").css({
-            height: $(window).height()-130,
+            height: $(window).height()-155,
             width: '99%'
         })
 
         $(window).resize( () => {
             $("#CalendarTable").css({
-                height: $(window).height()-130
+                height: $(window).height()-155
             })
         })
+//		this.props.updateGroupList();
     }
 
     componentWillUpdate() {
@@ -33,12 +34,20 @@ class CalendarContainer extends React.Component {
     }
 
     render() {
+		let groupName = this.props.groupName ? this.props.groupName : '';
 
         return (
             
-            <div className="containers" id="CalendarTable" >
+            <div className="" id="CalendarTable" >
 
-                <p>{`${this.props.nowDate.year()} - ${this.props.nowDate.month()+1}`}</p>
+				<div className="row">
+	                <div className="col push-s1">
+						{`${this.props.nowDate.year()} - ${this.props.nowDate.month()+1}`}
+					</div>
+					<div className="col offset-s5">
+						<h6>{groupName}</h6>
+					</div>
+				</div>
                 
                 {this.props.MonthDataasd.map( (item, i) => {
                     

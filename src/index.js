@@ -16,7 +16,8 @@ import App from './containers/App';
 import Auth from './containers/Auth/Auth';
 
 //const setting
-const store = createStore(reducers, compose(applyMiddleware(ReduxThunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() ) );
+const store = createStore(reducers, applyMiddleware(ReduxThunk));
+//const store = createStore(reducers, compose(applyMiddleware(ReduxThunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() ) );
 const rootElement = document.getElementById('root');
 
 //Render

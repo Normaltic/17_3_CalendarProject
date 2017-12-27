@@ -10,10 +10,11 @@ class VoteList extends React.Component {
     }
 
     render() {
+		let voteList = this.props.voteList ? this.props.voteList : [];
         return (
             <ul className="collection" >
                 {
-                    this.props.voteList.map( (item, i) => {
+                    voteList.map( (item, i) => {
 
                         if( item.place == '' ) item.place = '미정';
 

@@ -88,13 +88,13 @@ class VoteItem extends React.Component {
         return (
             <div>
                 <div className="ButtonDIV row">
-                    <button className="col push-s1 pushwaves-effect waves-light btn"
+                    <button className="VoteItem_UpdateBtn pushwaves-effect waves-light btn"
                             onClick={ () => history.push('/voteList/update')}> Update </button>
-                    <button className="col push-s2 pushwaves-effect wabes-light btn"
+                    <button className="VoteItem_Change2Sche pushwaves-effect wabes-light btn"
                             onClick={this._handleChangeToSchedule}> Change 2 Schedule </button>
-                    <button className="col push-s5 pushwaves-effect wabes-light btn"
+                    <button className="VoteItem_DeleteBtn pushwaves-effect wabes-light btn"
                             onClick={this._handleDeleteVote}>Delete</button>
-                    <button className="col push-s6 pushwaves-effect waves-light btn"
+                    <button className="VoteItem_BackBtn pushwaves-effect waves-light btn"
                             onClick={ () => history.goBack() } > Back </button>
                 </div>
                 <ScheduleItem is_sche={false} history={this.props.history} itemData={voteData} />

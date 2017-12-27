@@ -15,6 +15,10 @@ class ScheduleView extends React.Component {
         
     }
 
+	componentDidMount() {
+		//this.props.updateGroupList();
+	}
+
     render() {
 
         return (

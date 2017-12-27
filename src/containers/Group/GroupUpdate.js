@@ -4,22 +4,24 @@ import * as service from '../../services/authService';
 
 import './GroupCreate.css';
 
-class GroupCreate extends React.Component {
+class GroupUpdate extends React.Component {
     constructor(props) {
         super(props);
 
+		let groupData = this.props.groupData;
         this.state = {
-            name: '',
-            description: '',
+            name: groupData.name,
+            description: groupData.description,
             addmember: '',
-            members: []
+            members: groupData.members
         }
 
         this.handleChange = this.handleChange.bind(this);
 
         this.findUser = this.findUser.bind(this);
-		this.handleCreateGroup = this.handleCreateGroup.bind(this);
 		this.handleSubstrMembers = this.handleSubstrMembers.bind(this);
+		this.handleUpdateGroup = this.handleUpdateGroup.bind(this);
+		this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
     }
 
     handleChange(e) {
@@ -56,16 +58,16 @@ class GroupCreate extends React.Component {
                })
     }
 
-	handleCreateGroup() {
+	handleUpdateGroup() {
 		let groupData = this.state;
 		groupData.addmember = undefined;
 
-		service.createGroup(groupData)
+		service.updateGroupData(groupData)
 			   .then( (response) => {
 				   if( response.data.result ) {
-					   Materialize.toast("Success Create Group", 2500);
+					   Materialize.toast("Success Update Group", 2500);
 					   this.props.updateGroupList();
-					   this.props.history.push('/');
+					   this.props.history.goBack();
 				   } else {
 					   console.warn(response.data);
 				   }
@@ -74,6 +76,22 @@ class GroupCreate extends React.Component {
 				   console.warn(err);
 			   });
 	}
+
+	handleDeleteGroup() {
+		let groupName = this.state.name;
+
+		service.deleteGroup(groupName)
+			   .then( (response) => {
+				   if( response.data.result ) {
+					   Materialize.toast("Success Delete Group", 2500);
+					   this.props.updateGroupList();
+					   this.props.history.push('/');
+				   }
+			   })
+			   .catch( (err) => {
+				   console.warn(err);
+			   });
+	};
 
     render() {
 
@@ -89,6 +107,7 @@ class GroupCreate extends React.Component {
 	                <input className="col push-s1 s10 CtrlGroup_Item input-field"
 	                    type="text"
 	                    placeholder="Group Name"
+						disabled
 	                    name="name" value={this.state.name}
 	                    onChange={this.handleChange} />
 	                <input className="col push-s1 s10 CtrlGroup_Item input-box"
@@ -120,7 +139,9 @@ class GroupCreate extends React.Component {
 				<br /><br /><br /><br />
 				<div className="row">
 					<button className="col push-s1 pushwaves-effect waves-light btn"
-							onClick={this.handleCreateGroup}>Create</button>
+							onClick={this.handleUpdateGroup}>Update</button>
+					<button className="col push-s2 pushwaves-effect waves-light btn"
+							onClick={this.handleDeleteGroup}>Delete</button>
 				</div>
 
             </div>
@@ -128,4 +149,4 @@ class GroupCreate extends React.Component {
     }
 }
 
-export default GroupCreate;
+export default GroupUpdate;

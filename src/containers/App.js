@@ -3,6 +3,8 @@ import { Link, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
+import * as AccountActions from '../reducers/Account';
+import * as AuthAction from '../reducers/Auth';
 import * as CalendarActions from '../reducers/Calendar';
 import * as ScheduleActions from '../reducers/Schedule';
 import * as VoteActions from '../reducers/Vote';
@@ -24,32 +26,38 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
+		this.groupUpdateFlag = false;
+
         this.handleNextMonth = this.handleNextMonth.bind(this);
         this.handlePostMonth = this.handlePostMonth.bind(this);
         this.handleScheduleView = this.handleScheduleView.bind(this);
+		this.handleLogout = this.handleLogout.bind(this);
+		this.handleUpdateGroupList = this.handleUpdateGroupList.bind(this);
     }
+
+	componentWillMount() {
+	}
+
+	componentWillReceiveProps(nextProps) {
+	}
 
     componentDidMount() {
         $(".button-collapse").sideNav({
             closeOnClick: true
         });
-        $('.dropdown-button').dropdown({
-            inDuration: 300,
-            outDuration: 225,
-            constrainWidth: false, // Does not change width of dropdown to that of the activator
-            hover: false, // Activate on hover
-            gutter: 0, // Spacing from edge
-            belowOrigin: false, // Displays dropdown below the button
-            alignment: 'left', // Displays dropdown with edge aligned to the left of button
-            stopPropagation: true // Stops event propagation
-            }
-        );
-        
+		const handling = () => {
+			if( this.props.is_logged_in ) this.props.updateGroupList();
+			setTimeout(handling.bind(this), 1000*9);
+		};
+
+		handling();
     }
 
     /*shouldComponentUpdate(nextProps, nextState) {
         return this.props.id !== nextProps.id;
     }*/
+	handleUpdateGroupList() {
+	}
 
     handleNextMonth() {
         let { nowDate, is_logged_in, viewOption } = this.props;
@@ -69,6 +77,11 @@ class App extends React.Component {
         this.props.history.push('/schedule/view');
     }
 
+	handleLogout() {
+		this.props.LogoutAction();
+		Materialize.toast("Success to Logout", 2500);
+	}
+
     render() {
 
         const is_logged_in = this.props.is_logged_in == 'Success' ? true : false ;
@@ -76,10 +89,15 @@ class App extends React.Component {
         const navIcon = (
 
             <ul id="nav-mobile" className="right navIconSet">
-                <li><Link to={"/auth"}><i className="material-icons">{ is_logged_in ? "lock_outline" : "lock_open" }</i></Link></li>
-                <li><Link to ={"/schedule/create"}><i className="material-icons">note_add</i></Link></li>
-                {/*{this.props.is_logged_in == 'Success' ? <li><Link to ={"/schedule/create"}><i className="material-icons">note_add</i></Link></li> : null }*/}
-                {this.props.is_logged_in == 'Success' ? <a className='dropdown-button btn' href='#' data-activates='dropdown1'>Drop Me!</a> : null}
+                <li>
+				{
+					is_logged_in ? 
+					<Link to="/"><i className="material-icons"onClick={this.handleLogout}>lock_outline</i></Link>
+					:
+					<Link to="/auth"><i className="material-icons">lock_open</i></Link>
+				}
+				</li>
+                {this.props.is_logged_in == 'Success' ? <li><Link to ={"/schedule/create"}><i className="material-icons">note_add</i></Link></li> : null }
                   <ul id='dropdown1' className='dropdown-content'>
                     <li>>one</li>
                     <li>two</li>
@@ -108,29 +126,38 @@ class App extends React.Component {
 
                 <div className="row">
 
-                    <div className="Childrens" style={{height: '100%'}}>
+                    <div className="Childrens" style={{width: '100%', height: '100%'}}>
 
-                        <Route exact path={this.props.match.url} render={ () => (
-                            <div className="" style={{height: '100%'}}>
-                                    <HandleBtns showNextMonth={this.handleNextMonth} showPostMonth={this.handlePostMonth} />
-                                    <CalendarContainer handleSelectSchedule={this.handleScheduleView}/>
-                            </div> 
-                        )} />
+                        <Route exact path={this.props.match.url} render={ () => {
+							return (
+	                            <div className="" style={{width: '100%', height: '100%'}}>
+    	                                <HandleBtns showNextMonth={this.handleNextMonth} showPostMonth={this.handlePostMonth} nowDate={this.props.nowDate} />
+        	                            <CalendarContainer handleSelectSchedule={this.handleScheduleView}
+															updateGroupList={this.props.updateGroupList} />
+            	                </div> 
+                	        )}} />
 
-                        <Route path={`${this.props.match.url}schedule`} render={ ( {match, history} ) => (
-                            <ScheduleView match={match} history={history} />
-                        )} />
+                        <Route path={`${this.props.match.url}schedule`} render={ ( {match, history} ) => {
+							return (
+                            	<ScheduleView match={match} history={history} updateGroupList={this.props.updateGroupList}/>
+                        	)}} />
 
-                        <Route path={`${this.props.match.url}voteList`} render={ ( {match, history} ) => (
-                            <VoteListView 
-                                setVoteListRequest={this.props.setVoteListRequest} 
-                                setNowSelectedVote={this.props.setNowSelectedVote}
-                                match={match} history={history} />
-                        )} />
+                        <Route path={`${this.props.match.url}voteList`} render={ ( {match, history} ) => {
+							return (
+	                            <VoteListView 
+    	                            setVoteListRequest={this.props.setVoteListRequest} 
+        	                        setNowSelectedVote={this.props.setNowSelectedVote}
+									updateGroupList={this.props.updateGroupList}
+									is_logged_in={this.props.is_logged_in}
+            	                    match={match} history={history} />
+                	        )}} />
 
-                        <Route path={`${this.props.match.url}group`} render={ ( {match, history} ) => (
-                            <GroupView match={match} history={history} />
-                        )} />
+                        <Route path={`${this.props.match.url}group`} render={ ( {match, history} ) => {
+							return (
+                            	<GroupView match={match} history={history}
+									updateGroupList={this.props.updateGroupList}
+									userID={this.props.userID} />
+                       		)}} />
 
                     </div>
 
@@ -154,7 +181,9 @@ const mapDispatchToProps = (dispatch) => ({
     handleMonthAction: (date, is_logged_in, include_shared, groupList) => dispatch(CalendarActions.handleMonth(date, is_logged_in, include_shared, groupList)),
     setSelectedSchedule: (scheduleData) => dispatch(ScheduleActions.selectSchedule(scheduleData)),
     setVoteListRequest: () => dispatch(VoteActions.setVoteListRequest()),
-    setNowSelectedVote: (voteData) => dispatch(VoteActions.setNowSelectedVote(voteData))
+    setNowSelectedVote: (voteData) => dispatch(VoteActions.setNowSelectedVote(voteData)),
+	updateGroupList: () => dispatch(AccountActions.updateGroupList()),
+	LogoutAction: () => dispatch(AuthAction.LogoutAction())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

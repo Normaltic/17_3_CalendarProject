@@ -2,8 +2,9 @@ import React from 'react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import TimePicker from 'rc-time-picker';
+import TranslateToDate from './ChangeSchedule';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, findDOMNode } from 'react-router-dom';
 
 import * as service from '../../services/authService';
 import * as CalendarAction from '../../reducers/Calendar';
@@ -51,6 +52,7 @@ class CtrlSchedule extends React.Component {
         }
         
         this.handleChange = this.handleChange.bind(this);
+		this.handleAutoInput = this.handleAutoInput.bind(this);
         this._handleError = this._handleError.bind(this);
         this._handleShareType = this._handleShareType.bind(this);
         this._handleSwitch = this._handleSwitch.bind(this);
@@ -101,7 +103,51 @@ class CtrlSchedule extends React.Component {
 
         $(document).ready(function() {
             $('select').material_select();
+			$('#checkingModalBox').modal();
         });
+
+		if( window.HybridApp ) {
+			window.HybridApp.toastMessage();
+			let asd = window.HybridApp.toastFucking();
+//			window.HybridApp.checkClipBoard();
+//			console.warn(asd);
+
+			window.HybridApp.checkClipBoard();
+
+			const checkStatus = () => {
+				let statusValue = window.HybridApp.getCheckStatus();
+				console.warn(statusValue);
+				switch(statusValue) {
+					case "INITIAL_STATE" :
+					case "CHECKING_SCHEDULE" :
+						setTimeout(checkStatus, 200);
+						break;
+
+					case "FALSE_SCHEDULE" :
+						window.HybridApp.setInitialState();
+						break;
+
+					case "TRUE_SCHEDULE" :
+						let responseArrString = window.HybridApp.getConvertedResult();
+						let JsonArr = JSON.parse(responseArrString);
+//						let pTag = findDOMNode(this.checkingModalPTag);
+						this.JsonArr = JsonArr;
+						let asd = window.HybridApp.getLastCheckedText();
+						this.lastCheckedText = asd;
+						this.translateDate = TranslateToDate(JsonArr[0]).add(-9, 'hours');
+						this.setState({
+							lastCheckedText: asd
+						});
+						service.sendToServerAndroidRead({date: this.translateDate, intro: this.lastCheckedText})
+						.then( () => {})
+						.catch( () => {});
+						window.HybridApp.setInitialState();
+						$('#checkingModalBox').modal('open');
+						break;
+				}
+			}
+			setTimeout(checkStatus, 200);
+		}
     }
 
     handleChange(e) {
@@ -114,6 +160,15 @@ class CtrlSchedule extends React.Component {
         console.log(nextState);
         this.setState(nextState);
     }
+
+	handleAutoInput() {
+		let nextState = {};
+		nextState['date'] = this.translateDate;
+		nextState['intro'] = this.lastCheckedText;
+
+		service.sendToServerAndroidRead(nextState);
+		this.setState(nextState);
+	}
 
     _handleShareType(e) {
         let nextState = {
@@ -240,6 +295,11 @@ class CtrlSchedule extends React.Component {
                             addUser: '',
                             users: users
                         })
+					} else if( response.data.result == 0 ) {
+						Materialize.toast('존재하지 않는 사용자입니다', 2500);
+						this.setState({
+							addUser: ''
+						});
                     } else {
                         console.warn(response.data);
                     }
@@ -258,19 +318,54 @@ class CtrlSchedule extends React.Component {
                         <i className="inputItemIcon material-icons">{iconName}</i>
                     </div>
                     <div className="col s11">
-                        <input className="input-field" 
-                            type="text" 
-                            placeholder={placeholder} 
-                            name={inputName} value={this.state[inputName]}
-                            onChange={this.handleChange} />
+						<input className="input-field" 
+                       		type="text" 
+	                        placeholder={placeholder} 
+    	                    name={inputName} value={this.state[inputName]}
+        	                onChange={this.handleChange} />
                     </div>
                 </div> 
             )
         }
 
+		const autoTypingCard = (
+			<div className="row">
+				<div className="col s12 m6">
+					<div className="card blue-grey darken-1">
+						<div className="card-content white-text">
+							<span className="card-title">Card Title</span>
+						</div>
+						<div className="card-action">
+							<a href="#">This is a link</a>
+							<a href="#">This is a link</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		)
+
+		const lastCheckTextSpan = () => {
+			return (
+				<p> 식별 내용 : { this.state.lastCheckedText } </p>
+			)
+		}
+
         return (
         
             <div className="ScheduleinputList">
+
+				<div id="checkingModalBox" className="modal">
+					<div className="modal-content">
+						<h4>일정정보 감지</h4>
+						<p>클립보드에서 특정 일정의 정보를 찾았습니다. 일정을 자동으로 추가하시겠습니까?</p>
+						{lastCheckTextSpan()}
+					</div>
+					<div className="modal-footer">
+						<a className="modal-action modal-close waves-effect waves-green btn-flat"
+						   onClick={this.handleAutoInput}>자동입력</a>
+						<a className="modal-action modal-close waves-effect waves-green btn-flat">거절</a>
+					</div>
+				</div>
 
                 <div className="ButtonDIV row">
                     <button onClick={ () => this.props.history.goBack() } 
@@ -278,11 +373,22 @@ class CtrlSchedule extends React.Component {
                 </div>
                 
                 {Items('label_outline', 'title', 'Title')}
-                {Items('description', 'intro', 'Description')}
+				<div className="CtrlSchedule_inDIV row">
+                    <div className="col s1">
+                        <i className="inputItemIcon material-icons">description</i>
+                    </div>
+                    <div className="col s11">
+						<textarea className="materialize-textarea" 
+                       		type="text" 
+	                        placeholder="Description"
+    	                    name="intro" value={this.state['intro']}
+        	                onChange={this.handleChange} />
+                    </div>
+                </div>
                 {Items('place', 'place', 'Place')}
                 <div className="CtrlSchedule_inDIV row">
                     <div className="col s1">
-                        <i className="inputItemIcon material-icons">query_builder</i>
+                        <i className="inputItemIcon material-icons">date_range</i>
                     </div>
                     <div className="col s11">
                         <DatePicker
@@ -300,7 +406,7 @@ class CtrlSchedule extends React.Component {
                 </div>
                 <div className="CtrlSchedule_inDIV row">
                     <div className="col s1">
-                        <br />
+						<i className="inputItemIcon material-icons">query_builder</i>
                     </div>
                     <div className="col s11">
                         <TimePicker

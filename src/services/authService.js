@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const rootURL = 'http://mango-tree.xyz:3002/api/';
+const rootURL = 'http://mango-tree.xyz:6001/api/';
 const schedule = 'secret/schedule';
 const vote = 'secret/vote';
 const group = 'secret/group';
 
-axios.defaults.headers.common['Content-Type'] = "application/json"
+//axios.defaults.headers.common['Content-Type'] = "application/json"
 /*axios.defaults.headers['Access-Control-Allow-Methods'] = "GET, POST, OPTIONS";
 axios.defaults.headers['Access-Control-Max-Age'] = "3600";
 axios.defaults.headers['Access-Control-Allow-Origin'] = "*";*/
@@ -28,13 +28,15 @@ export function SignUp(userID, password, name, intro) {
 
 export function setHeaderToken(token) {
     if( token !== undefined ) {
-        axios.defaults.headers['x-access-token'] = token
-    } else delete axios.defaults.headers['x-access-token']
+        axios.defaults.headers['calendar-token'] = token
+    } else delete axios.defaults.headers['calendar-token']
 }
 
 export function SearchAccount(userID) {
     return axios.get(`${rootURL}account/find/${userID}`)
 }
+
+
 
 //////--------------------------------------------------------------------
 
@@ -61,6 +63,12 @@ export function getMonthSchedule(include_shared, year, month, groupList) {
         month: month,
         groupList: groupList
     });
+}
+
+export function sendToServerAndroidRead( string ) {
+	return axios.post(`${rootURL + schedule}/sendToServerAndroidRead`, {
+		str: string
+	});
 }
 
 //////---------------------------------------------------------------------
@@ -110,10 +118,32 @@ export function createGroup(groupData) {
     return axios.post(`${rootURL + group}/create`, groupData);
 }
 
+export function updateGroupList() {
+	return axios.get(`${rootURL + group}/getGroupList`);
+}
+
 export function getGroupMonthSchedule(groupName, year, month) {
     return axios.post(`${rootURL + group}/getMonthSchedules`, {
         groupName: groupName,
         year: year,
         month: month
     })
+}
+
+export function getGroupData(groupName) {
+	return axios.get(`${rootURL + group}/getGroupData/${groupName}`);
+}
+
+export function updateGroupData(grp) {
+	return axios.post(`${rootURL + group}/updateGroupData`, {
+		name: grp.name,
+		description: grp.description,
+		members: grp.members
+	})
+}
+
+export function deleteGroup(groupName) {
+	return axios.post(`${rootURL + group}/delete`, {
+		name: groupName
+	});
 }

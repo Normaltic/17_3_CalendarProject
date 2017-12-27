@@ -7,6 +7,8 @@ import moment from 'moment'
 const HANDLEMONTH = 'calendar/HADNLEMONTH';
 const HANDLEMONTH_LOGIN = 'calendar/HANDLEMONTH_LOGIN';
 
+const CALENDAR_INITIALIZE = 'calendar/CALENDAR_INITIALIZE';
+
 const SETVIEWOPTION = 'calendar/SETVIEWOPTION';
 
 const REFRESHMONTHDATA = 'caneldar/REFRESHMONTHDATA';
@@ -15,6 +17,7 @@ const REFRESHMONTHDATA = 'caneldar/REFRESHMONTHDATA';
 export const handleMonthAction = createAction(HANDLEMONTH); // date
 export const handleMonth_LoginAction = createAction(HANDLEMONTH_LOGIN); // date, ScheduleList
 export const setViewOption = createAction(SETVIEWOPTION); // viewOption { acc, share, groupList }
+export const setInitialCalendar = createAction(CALENDAR_INITIALIZE);
 
 export const refreshMonthDataAction = createAction(REFRESHMONTHDATA); // ScheduleList
 
@@ -139,6 +142,7 @@ export default handleActions({
     },
 
     [HANDLEMONTH_LOGIN]: (state, action) => {
+		action.payload.date.date(1);
         return state.set('nowDate', action.payload.date)
                     .set('nowMonthData', setMonthList(action.payload.date, action.payload.scheduleData));
     },
@@ -146,6 +150,18 @@ export default handleActions({
     [SETVIEWOPTION]: (state, action) => {
         return state.set('viewOption', action.payload);
     },
+
+	[CALENDAR_INITIALIZE]: (state, action) => {
+		let date = moment();
+		date.date(1);
+		return state.set('nowDate', date)
+					.set('nowMonthData', setMonthList(date))
+					.set('viewOption', {
+						acc: true,
+						share: true,
+						groupList: []
+					});
+	},
 
     [REFRESHMONTHDATA]: (state, action) => {
         return state.set('nowMonthData', setMonthList(state.get('nowDate'), action.payload));

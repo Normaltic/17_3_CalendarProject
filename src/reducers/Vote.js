@@ -7,9 +7,11 @@ import * as services from '../services/authService';
 //Define Actions
 const SETVOTELIST = 'vote/SETVOTELIST';
 const SETNOWSELECTEDVOTE = 'vote/SETNOWSELECTEDVOTE';
+const SETINITIALIZE = 'vote/SETINITIALIZE';
 
 export const setVoteList = createAction(SETVOTELIST); // voteList
 export const setNowSelectedVote = createAction(SETNOWSELECTEDVOTE); // voteData
+export const setInitialize = createAction(SETINITIALIZE);
 
 const initialState = Map({
     voteList: [],
@@ -59,5 +61,10 @@ export default handleActions({
 
     [SETNOWSELECTEDVOTE]: (state, action) => {
         return state.set('nowSelectedVote', action.payload);
-    }
+    },
+
+	[SETINITIALIZE]: (state, action) => {
+		return state.set('voteList': [])
+					.set('nowSelectedVote', {});
+	}
 }, initialState)

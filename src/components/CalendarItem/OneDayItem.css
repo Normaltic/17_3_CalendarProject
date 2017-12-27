@@ -28,3 +28,7 @@ p.sche {
     margin-right: 15px;
     padding-top: 15px;
 }
+
+.ScheduleItem_ShareItem {
+	color: blue;
+}

@@ -14,8 +14,17 @@ class VoteListView extends React.Component {
 
     componentWillMount() {
         console.warn("Fuck");
-        this.props.setVoteListRequest();
+		if( this.props.is_logged_in == 'Success' ) 
+	        this.props.setVoteListRequest();
+		else {
+			Materialize.toast("Please Login", 2500);
+			this.props.history.push('/auth');
+		}
     }
+
+	componentDidMount() {
+		//this.props.updateGroupList();
+	}
 
     _selectVote(voteData) {
         this.props.setNowSelectedVote(voteData);

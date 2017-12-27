@@ -11,13 +11,13 @@
 }
 
 .Childrens {
-    padding-left: 300px;
-    padding-right: 15px;
+	padding-left: 315px;
+	padding-right: 15px;
 }
 
 @media only screen and ( max-width : 992px ) {
     .Childrens {
-        padding-left: 0px;
+        padding-left: 15px;
     }
 }
 

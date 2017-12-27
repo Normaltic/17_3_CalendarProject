@@ -17,7 +17,7 @@ class OneDayItem extends React.Component {
 
     componentDidMount() {
         //$('.modal-trigger').leanModal('open');
-        if( this.props.is_logged_in == 'Success' ) $('.modal').modal();
+        if( this.props.is_logged_in == 'Success' && this.props.dayData ) $('.modal').modal();
     }
 
     handleClick(index) {
@@ -32,7 +32,7 @@ class OneDayItem extends React.Component {
         const spreadSchedule = () => {
             return this.props.dayData.map( (item, i) => (
                 // return <li key={i}><a className="modal-trigger" href="#modal1">{item.title}</a></li>
-                <li key={i}>{item.title}</li>
+                <li className={item.is_share ? "ScheduleItem_ShareItem" : ""} key={i}>{item.title}</li>
             ))
         }
 
@@ -55,11 +55,10 @@ class OneDayItem extends React.Component {
 
         return (
             <div className={`oneDay`} id="oneDay" style={{height: '100%'}}>
-                <div className={`modal-trigger ${this.props.is_nowMonth}` } data-target={this.state.componentKey} style={{height: '100%'}}>
+                <div className={`modal-trigger ${this.props.is_nowMonth}` } data-target={this.props.dayData ? this.state.componentKey : ""} style={{height: '100%'}}>
                     <div className={`dayDate ${this.props.is_holiday}`}>{this.props.date}</div>
                     <ul className="eventList">
                         {this.props.is_logged_in == 'Success' ? spreadSchedule() : null}
-                        {/*<a className="modal-trigger" data-target="modal1" onClick={this.handleClick}>Fuck</a>*/}
                     </ul>
                 </div>
                 {this.props.is_logged_in == 'Success'? (
