@@ -20,6 +20,10 @@ Materialize css 사용 <br />
 
 # Version
 
+## 1.4
+Vote 페이지 추가 <br /> 
+Vote 관련 기능 추가 ( Vote 등록, 투표, 코멘트 작성 ) <br /> 
+
 ## 1.3
 sidenav_fixed를 통한 SideMenu 고정 ( 모바일에서 숨김 ) <br />
 react-router v3 => v4 버전 업
